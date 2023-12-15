@@ -29,6 +29,8 @@ def index(path):
     form_data = request.form.to_dict()
     if request.method == 'GET':
         response = requests.get(path, params=params, headers={'Authorization': headers.get('Authorization')})
+        print(f'jsonify(response.json())={jsonify(response.json())}')
+        print(f'response.status_code={response.status_code}')
         return jsonify(response.json()), response.status_code
     elif request.method == 'POST':
         response = requests.post(path, data=form_data, json=json_data, headers=headers)
