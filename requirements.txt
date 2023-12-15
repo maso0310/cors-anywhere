@@ -1,3 +1,5 @@
 flask
 requests
 Flask-APScheduler
+gunicorn
+flask_cors
