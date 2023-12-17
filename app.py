@@ -23,6 +23,7 @@ wake_up_thread.start()
 
 @app.route("/<path:path>", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def index(path):
+    print(f'path={path}')
     headers = request.headers
     params = request.args
     json_data = request.json
@@ -41,5 +42,7 @@ def index(path):
     return path
 
 
+import os
 if __name__ == "__main__":
-    app.run(debug=True, port=1234)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
