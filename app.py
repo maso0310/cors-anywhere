@@ -26,20 +26,26 @@ def index(path):
     print(f'path={path}')
     headers = request.headers
     params = request.args
-    json_data = request.json
-    form_data = request.form.to_dict()
+
+    # 对于 GET 请求，直接转发请求
     if request.method == 'GET':
         response = requests.get(path, params=params, headers={'Authorization': headers.get('Authorization')})
-        print(f'jsonify(response.json())={jsonify(response.json())}')
-        print(f'response.status_code={response.status_code}')
+        print(f'response={response}')
+        print(f'response.json()={response.json()}')
         return jsonify(response.json()), response.status_code
-    elif request.method == 'POST':
-        response = requests.post(path, data=form_data, json=json_data, headers=headers)
-        return jsonify(response.json()), response.status_code
-    elif request.method == 'PUT':
-        response = requests.put(path, data=form_data, json=json_data, headers=headers)
-        return jsonify(response.json()), response.status_code
-    return path
+
+    # 对于 POST 和 PUT 请求，处理 JSON 数据
+    if request.method in ['POST', 'PUT']:
+        if request.content_type == 'application/json':
+            json_data = request.json
+            if request.method == 'POST':
+                response = requests.post(path, json=json_data, headers=headers)
+            else:  # PUT
+                response = requests.put(path, json=json_data, headers=headers)
+            return jsonify(response.json()), response.status_code
+        else:
+            # 返回错误消息或相应的响应
+            return "Unsupported Media Type", 415
 
 
 import os
