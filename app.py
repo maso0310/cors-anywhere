@@ -31,8 +31,8 @@ def index(path):
     if request.method == 'GET':
         response = requests.get(path, params=params, headers={'Authorization': headers.get('Authorization')})
         print(f'response={response}')
-        print(f'response.json()={response.json()}')
-        return jsonify(response.json()), response.status_code
+        print(f'response.text={response.text}')
+        return response.text, response.status_code
 
     # 对于 POST 和 PUT 请求，处理 JSON 数据
     if request.method in ['POST', 'PUT']:
